@@ -1,0 +1,48 @@
+{% load static %}
+<div class="cards-con-cont">
+    <div id="{{ elem.id }}" class="card-container">
+        <div class="card">
+            {% if elem.Знижка %}
+                <span class="discount">-{{ elem.Знижка }}%</span>
+            {% endif %}
+            <span class="abs">
+                <div class="card-image-container">
+                    <div class="card-image">
+                        {% if elem.photo|length == 1 %}
+                            <img class='title activated' id="{{ elem.id }}" src="data:image/jpeg;base64, {{ elem.photo.tit }}" alt="data:image/jpeg;base64, {{ elem.photo.tit }}">
+                        {% else %}
+                            <img class='title activated_opacity' id="{{ elem.id }}" src="data:image/jpeg;base64,{{ elem.photo.tit }}" alt="data:image/jpeg;base64,{{ elem.photo.tit }}">
+                            <img class='title_two opacity' id="{{ elem.id }}" src="data:image/jpeg;base64,{{ elem.photo.stit }}" alt="data:image/jpeg;base64,{{ elem.photo.stit }}">
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="section-card">
+                    <div class="card-name-and-buybtn">
+                        <span id="nm-pr-con">
+                            <a class="card-name"><abbr id="{{ elem.id }}" title="{{ elem.Бренд }} {{ elem.Модель }} {{ elem.Колір }}">{{ elem.Бренд }} {{ elem.Модель }} {{ elem.Колір }}</abbr></a>
+                            {% if elem.discountPrice %}
+                                <span class="discount-container">
+                                    <span class="discountPrice">{{ elem.discountPrice }} &#8372;</span>
+                                    <span class="card-price-without-discount">{{ elem.Ціна }} &#8372;</span>
+                                </span>
+                            {% else %}    
+                                <span class="card-price">{{ elem.Ціна }} &#8372;</span>
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div id="{{ elem.id }}" class="card-btn_buy_one_click">
+                        <button id="{{ elem.id. }}">
+                            <img id="{{ elem.id }}" src="{% static '/images/' %}icons/buybtn.png">
+                        </button>
+                    </div>
+                </div>
+            </span>
+            <span id="productId" class="noactive">{{ elem.id. }}</span>
+            {% for size in elem.Розмір %}
+                {% if size != '' %}
+                    <span class="size noactive">{{ size }}</span>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>

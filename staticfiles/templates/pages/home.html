@@ -1,0 +1,117 @@
+{% extends "base/base.html" %}
+
+{% block metatags %}
+    <meta name="description" content="Інтернет магазин спортивних товарів та одягу для боксу та боротьби. Доставка по всій Україні ">
+    <meta name="keywords" content="Придбати борцівки онлайн, купити боксерки в інтернеті, боксерки купити, спортивний одяг в інтернет магазині, спортивні костюми, взуття купити онлайн">
+{% endblock %}
+
+{% block titlepage %}Інтернет-магазин спортивних товарів{% endblock %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/styles/home_page.css' %}">
+{% endblock %}
+
+
+{% block body %}
+
+
+    {% include '../fragments/header.html' %}
+    
+    {% include '../fragments/show_order_block.html' %}
+    
+    {% include '../fragments/trash.html' %}
+    
+    {% include '../fragments/succes_window.html' %}
+
+    <div class="backt-order-container">
+        
+    </div>
+
+    <div class="page-container">
+
+        <main class="main">
+
+            {% include '../fragments/banner.html' %}
+
+            <div class="content-container">
+
+                {% include '../fragments/aside_filter.html' %}
+
+
+                <div class="cont-crd-pnl">
+
+                    {% include '../fragments/filter_section.html' %}
+
+
+                    <div class="product-cards-con">
+
+                        {% if card|length < 1 %}
+                            <div class="not-found">
+                                <h1>Товари не знайдено</h1>
+                            </div>
+                        {% endif %}
+
+                        <div class="product-cards-container">
+                            {% for elem in card %}
+                                {% include '../fragments/card.html' %}
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; gap: 1rem;">
+                        <span>Сторінка {{ page }} з {{ total_pages }}</span>
+                        <div style="display: flex; gap: 1rem;" class="pages-button">
+                            {% if page > 1 %}
+                                <button id="back" data="{{page}}">Назад</button>
+                            {% endif %}
+
+                            {% if page < total_pages %}
+                                <button id="next" data="{{page}}">Наступна</button>
+                            {% endif %}
+                        </div>
+                        <script>
+                            const page_url = new URLSearchParams(location.search);
+                            const back = document.getElementById('back');
+                            const next = document.getElementById('next');
+                            
+
+                            try {
+                                back.onclick = () => {
+                                    let page = back.getAttribute('data'); 
+    
+                                    page_url.set('page', +page - 1);
+                                    
+                                    location.href = window.location.origin + '/home?' + page_url.toString();
+                                }
+                            } catch {
+
+                            }
+
+                            try {
+                                next.onclick = () => {
+                                    let page = next.getAttribute('data'); 
+        
+                                    page_url.set('page', +page + 1);
+        
+                                    location.href = window.location.origin + '/home?' + page_url.toString();
+                                }
+                            } catch {
+
+                            }
+
+
+                        </script>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+
+        
+        {% include '../fragments/footer.html' %}
+        
+    </div>
+    {% include '../fragments/scroll_button.html' %}
+    {% include '../fragments/scripts.html' %}
+
+{% endblock %}

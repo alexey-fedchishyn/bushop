@@ -1,0 +1,11 @@
+
+.more-cards button {
+    background: transparent;
+    color: var(--filter-txt);
+    font-size: var(--FS);
+
+}
+
+.more-cards button:hover {
+    text-decoration: underline;
+}

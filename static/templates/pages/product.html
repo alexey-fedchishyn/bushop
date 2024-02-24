@@ -1,0 +1,115 @@
+{% extends 'base/base.html' %}
+
+{% block metatags %}
+    <meta name="description" content="{{ card.Категорія_id }} {{ card.Бренд_id }} {{ card.Модель }} {{ card.Колір }} в інтернет магазині BorcivkyUkraine">
+    <meta name="keywords" content="{{ card.Категорія_id }} {{ card.Бренд_id }} {{ card.Модель }} {{ card.Колір }}">
+{% endblock %}
+
+{% block titlepage %}{{ card.Категорія_id }} {{ card.Бренд_id }} {{ card.Модель }} {{ card.Колір }} {{ card.Ціна2 }} грн{% endblock %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/styles/home_page.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles/product_page.css' %}">
+{% endblock %}
+
+{% block body %}
+
+
+
+    {% include '../fragments/show_order_block.html' %}
+
+    {% include '../fragments/trash.html' %}
+    
+    {% include '../fragments/succes_window.html' %}
+    
+    
+    <div class="page-container">
+        {% include '../fragments/header.html' %}
+
+        <main>
+            <div>
+                <div class="product-page-container">
+                    <div class="product-page-images">
+                        <div class="product-page-image-container">
+                            {% for key, value in card.photo.items %}
+                                <img src="data:image/jpeg;base64,{{ value }}" alt="data:image/jpeg;base64,{{  value  }}">
+                            {% endfor %}
+                        </div>
+                        <div class="prodcut-page-big-image">
+                            <img class='title activated_opacity' id="{{ card.id }}" src="data:image/jpeg;base64,{{ card.photo.tit }}" alt="/data:image/jpeg;base64,{{ card.photo.tit }}">
+                        </div>
+                    </div>
+                    <div class="product-page-info-container">
+                        <div>
+                            <div class="product-name">
+                                <span>{{ card.Бренд_id }} {{ card.Модель }}</span>
+                            </div>
+                            <div class="product-price">
+                                <span class="price-name">Ціна</span>
+                                <span class="staticPrice">{{ card.Ціна2 }} &#8372;</span>
+                            </div>
+                            <div class="product-description">
+                                <span>{{ card.Категорія_id }} {{ card.Бренд_id }} ({{card.id}})</span>
+                                <div><span class="description">{{ card.Опис }}</span><button class="desc-btn">...</button></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="product-sizes">
+                                <span>Розмір</span>
+                                <div>
+                                    {% for i in card.Розмір %}
+                                        {% if i != '' %}
+                                            <div><span class='product-size'>{{ i }}</span></div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="product-page-btns">
+                                <div class="number-btns">
+                                    <button class="plus">+</button>
+                                    <span>1</span>
+                                    <button class="minus">-</button>
+                                    <p class="product-n" style="display: none;">{{ card.Кількість }}</p>
+                                </div>
+                                <div class="buy_bckt-btns">
+                                    <button onclick="buyBtn(this)" id="buy">КУПИТИ</button>
+                                    <button onclick="bcktBtn(this)" id="in-bckt">В КОШИК<span></span></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        {% include '../fragments/footer.html' %}
+    </div>
+    <span style="display: none;" id="product-id">{{ card.id }}</span>
+    <span style="display: none;" id="product-name">{{ card.Бренд_id }} {{ card.Модель }}</span>
+    <span style="display: none;" id="product-img">data:image/jpeg;base64,{{ card.photo.tit }}</span>
+    <span style="display: none;" id="product-price">{{ card.Ціна2 }} &#8372;</span>
+    <span style="display: none;" id="product-discount">{{ card.Знижка }}</span>
+    <style>
+        @keyframes invalid {
+            0% {
+                transform: scale(1);
+            }
+            30% {
+                transform: rotateY(5deg);
+            }
+            50% {
+                transform: scale(1.03);
+            }
+            60% {
+                transform: rotateY(-5deg);
+            }
+            100% {
+                transform: rotateY(0);
+                transform: scale(1);
+            }
+        }
+    </style>
+    {% include '../fragments/scripts.html' %}
+    <script src="{% static 'js/product_page.js' %}"></script>
+
+{% endblock %}

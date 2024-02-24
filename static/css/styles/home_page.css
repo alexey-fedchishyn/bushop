@@ -1,0 +1,15 @@
+@import '../general_settings/settings.css';
+@import '../fragments/to_top_btn.css';
+@import '../fragments/header.css';
+@import '../fragments/page_container.css';
+@import '../fragments/banner.css';
+@import '../fragments/aside_filter.css';
+@import '../fragments/cards_container.css';
+@import '../fragments/filter_section.css';
+@import '../fragments/card.css';
+@import '../fragments/not_found.css';
+@import '../fragments/show_more_btn.css';
+@import '../fragments/fast_form.css';
+@import '../fragments/footer.css';
+@import '../fragments/pages_button.css';
+@import '../media/media_home.css';

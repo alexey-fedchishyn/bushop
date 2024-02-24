@@ -1,0 +1,10 @@
+
+.not-found {
+    text-align: center;
+    width: 100%;
+}
+
+.not-found h1 {
+    font-size: var(--FS);
+    padding: 2rem 0;
+}

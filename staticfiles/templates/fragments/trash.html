@@ -1,0 +1,66 @@
+<div class="products-bckt-window">
+    <div class="window-bckt-container">
+        <div class="products-bckt-container">
+            <div class="products-bckt">
+                <div class="header-bckt">
+                    <h1>Корзина</h1>
+                    <button id="order-bckt-crosser">╳</button>
+                </div>
+                <div class="bckt-orders">
+                    <div class="empty">
+                        <p>Корзина порожня</p>
+                    </div>
+                </div>
+                <div class="total-sum">
+                    <span>Сума: </span><span class="sum">0</span><span>&#8372;</span>
+                </div>
+                <div class="btn-container">
+                    <button class="go-form-btn-order">Оформити замовлення</button>
+                </div>
+                <div class="form-order">
+                    <div class="order-form">
+                        <h1>Ваші контактні данні</h1>
+                        <div class="userNameb">
+                            <label for="name">Ім'я</label>
+                            <input name="name" type="text" autofocus autocomplete="off">
+                        </div>
+                        <div class="userSecondNameb">
+                            <label for="second_name">Прізвище</label>
+                            <input name="second_name" type="text" autocomplete="off">
+                        </div>
+                        <div class="userPhoneb">
+                            <label for="phone">Мобільний телефон</label>
+                            <input type="text" name="phone" placeholder="+ 38 (000) 000 00 00">
+                        </div>
+                        <div class="userEmailb">
+                            <label for="phone">Електрона пошта</label>
+                            <input type="email" name="userEmail" placeholder="example@gmail.com">
+                        </div>
+                        {% include "./nova_poshta_form.html" %}
+                        <div class="oplatab">
+                            <h1>Виберіть тип оплати</h1>
+                            <div>
+                                {% for op in oplata %}
+                                    <span>
+                                        <input class="orders-opl-elemsb" type="radio" name="req" value="{{ op }}">
+                                        <label for="nal">{{ op }}</label>
+                                    </span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="info-inputs">
+                            <input type="text" name="prodcutId" class="noactive">
+                        </div>
+                        <input class="submit-bckt" type="submit" value="Підтвердити замовлення">
+                    </div>
+                    <div class="succes-order">
+                        <svg viewbox="0 0 150 135" width="100%" height="300">
+                            <polyline class="polyline" points="20,60 50,90 110,20" stroke="green" stroke-width="15" fill="none"/>
+                        </svg>
+                        <text class="polyline" fill="black" style="font-weight:bold;">Ваше замовлення зареєстровано. Додаткова інформація надійде на вашу пошту</text>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

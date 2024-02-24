@@ -1,0 +1,35 @@
+{% load static %}
+<header class="header">
+    <nav class="header-nav">
+        <div class="header-nav-container">
+            <div class="header-nav-logo">
+                <h1>
+                    <a href="/">
+                        <span class="header-nav-logo-B">B</span>
+                         <span class="header-nav-logo-U">U</span>
+                    </a>
+                </h1>
+            </div>
+            <div class="header-nav-panel">
+                <ul>
+                    <a href="/">
+                        <li>Головна</li>
+                    </a>
+                    <a href="#Contacts">
+                        <li>Контакти</li>
+                    </a>
+                    <a href="{% url 'home' %}/info">
+                        <li>Оплата та Доставка</li>
+                    </a>
+                </ul>
+            </div>
+            <div class="header-nav-backet_btn">
+                <div class="price-bckt-container">
+                   <img src="{% static 'images/icons/Vector (2).png' %}">
+                   <span id="counter-cards"></span>
+                </div>
+                <span class="ripple"></span>
+            </div>
+        </div>
+    </nav>
+</header>

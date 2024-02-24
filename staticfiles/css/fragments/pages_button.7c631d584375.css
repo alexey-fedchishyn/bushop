@@ -1,0 +1,11 @@
+.pages-button {
+    margin-right: 1rem;
+}
+
+.pages-button > button {
+    background: transparent;
+}
+
+.pages-button > button:hover {
+    text-decoration: underline;
+}

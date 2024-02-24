@@ -1,0 +1,55 @@
+
+/* nav and cards container */
+.cont-crd-pnl {
+    display: flex;
+    flex-flow: column;
+    width: 100%;
+}
+
+.cont-crd-pnl nav {
+    display: inline-flex;
+    justify-content: space-between;
+}
+
+.sortBy {
+    margin-right: 0.5rem;
+    position: relative;
+}
+
+.sortBy ul {
+    display: none;
+
+    background: var(--BANER-COLOR);
+    border-radius: 3px;
+
+    position: absolute;
+    top: 100%;
+    right: 0;
+    z-index: 999;
+}
+
+.sortBy li {
+    padding: 1rem 0.5rem;
+}
+
+.sortBy li:hover {
+    background: #1a234daa;
+    color: var(--BANER-COLOR);
+}
+
+.sortBy li,
+.sortBy span {
+    white-space: nowrap;
+    cursor: pointer;
+    color: var(--LinksColor);
+    font-size: var(--FS);
+    transition: var(--BTN-transition);
+    opacity: 0.8;
+
+}
+
+.sortBy span:hover {
+    color: var(--STATIC-COLOR);
+    opacity: 1;
+    filter: brightness(110%);
+}

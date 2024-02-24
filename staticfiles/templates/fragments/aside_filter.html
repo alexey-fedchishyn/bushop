@@ -1,0 +1,149 @@
+<aside id="slide-menu" class="filter-panel-container">
+    <div class="panel-container">
+        <button id="crosser">&#9587;</button>
+        <div class="btn-cross"><label class="category" for="filter-label">Категорії</label></div>
+        <div class="filter">
+            {% for category in category %}
+                <span>
+                    <input onclick="getCategory(this)" data="Категорія" id="{{ category }}" class="checkbox" name="category" type="radio" value="{{category}}"><label for="{{category}}">{{category}}</label>
+                </span>
+            {% endfor %}
+        </div>
+        <div class="btn-cross-sz"><label class="sz" for="filter-label-sz">Розміри</label></div>
+        <div class="sz_filter">
+            {% for size in sizes %}
+                <span>
+                    <input type="radio" id="{{ size }}" data="Розмір" class="checkbox" name="sz" value="{{ size }}"><label for="{{size}}">{{ size }}</label>
+                </span>
+            {% endfor %}
+        </div>
+        <div class="btn-brands"><label class="br" for="filter-label-br">Бренди</label></div>
+        <div class="br_filter">
+            {% for brand in brands %}
+                <span>
+                    <input type="radio" id="{{brand}}" data="Бренд" class="checkbox" name="br" value="{{brand}}"><label for="{{brand}}">{{brand}}</label>
+                </span>
+            {% endfor %}
+        </div>
+        <div class="price-filter">
+            <label class="range" for="range">Фільтр ціни</label>
+            <span>
+                <input id="range" type="text" value="{{ min_price }}" name="price-min" autocomplete="off"> - <input id="range" autocomplete="off" name="price-max" type="text" value="{{ max_price }}">
+            </span>
+            <span>
+                <button>Пошук</button>
+            </span>
+        </div>
+    </div>
+</aside>
+
+<script>
+    const url = new URLSearchParams(location.search);
+
+    // Якщо сторінка категорії тоді згортаємо категорії і робимо кнопку
+    if (url.get('Категорія')) {
+        document.querySelectorAll('.filter-panel-container > .panel-container > .filter input').forEach(elem => {
+            if (elem.type === 'radio') {
+                if (url.get('category') === elem.value) {
+                    elem.checked = true;
+                }
+            }
+        })
+
+        const categoryBtn = document.querySelector('.btn-cross');
+        const filterDiv = document.querySelector('.filter');
+        const filterLabel = document.querySelector('.btn-cross > label');
+
+        setFilterBtns(categoryBtn, filterLabel, filterDiv, 'flex')
+        categoryBtn.classList.add('add-after-el')
+
+    }    
+
+    function setFilterBtns($block, $label, $block2, $display) {
+        $block.onmouseover = () => {
+            $label.style.textDecoration = 'underline';
+        }
+        
+        $block.onmouseleave = () => {
+            $label.style.textDecoration = 'none';
+        }
+
+        $block.style.userSelect = 'none';
+        $block.style.cursor = 'pointer';
+        $label.style.cursor = 'pointer';
+
+        $block2.style.display = 'none';
+        $block.onclick = () => {
+            if ($block2.style.display === 'none') {
+                $block2.style.display = $display;
+            } else {
+                $block2.style.display = 'none';
+            }
+        }        
+    }
+
+    const sizesBtn = document.querySelector('.btn-cross-sz');
+    const sizesLabel = document.querySelector('.btn-cross-sz > label');
+    const sizes = document.querySelector('.sz_filter');
+
+    setFilterBtns(sizesBtn, sizesLabel, sizes, 'grid')
+
+
+    const brBtn = document.querySelector('.btn-brands');
+    const brLabel = document.querySelector('.btn-brands > label');
+    const brBlock = document.querySelector('.br_filter');
+
+    setFilterBtns(brBtn, brLabel, brBlock, 'flex');
+
+    function urls() {
+        const items = document.querySelectorAll('.filter-panel-container > .panel-container > div > span > input:not(#range)');
+        
+        
+    
+        items.forEach(elem => {
+            if (url.has(elem.getAttribute('data'), elem.value)) {
+                elem.checked = true;
+            }
+
+
+            elem.onclick = async () => {
+                let name = await elem.getAttribute('data');
+                let data = await elem.value;
+
+                const params = await url
+
+                if (name == 'Категорія') {
+                    while (params.size != 0) {
+                        for (let [k, v] of params.entries()) {
+                            params.delete(k, v);
+                        }
+                    }
+                }
+                
+                params.set(name, data)
+                if (params.has('page')) {
+                    params.set('page', 1);
+                }
+                location.href = window.location.origin + '/home?' + params.toString();
+
+            }
+        })
+        
+    }
+
+    document.querySelector('.price-filter button').onclick = () => {
+        const min = document.querySelector('[name=price-min]').value;
+        const max = document.querySelector('[name=price-max]').value;
+
+        url.set('price-min', min);
+        url.set('price-max', max);
+
+        if (url.has('page')) {
+            url.set('page', 1);
+        }
+
+        location.href = window.location.origin + '/home?' + url.toString();
+    }
+
+    urls()
+</script>

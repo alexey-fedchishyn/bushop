@@ -1,0 +1,53 @@
+/* VARIABLES */
+
+:root {
+    /* SIZES */
+    --FS: clamp(0.75rem, 0.95vw, 2.5rem);
+    --FS-bckt: clamp(0.8rem, 1.3vw, 2.5rem);
+    --FS-bckt-hd: clamp(1rem, 1.3vw, 2.5rem);
+    --header-clamp: clamp(1.7rem, 1.9vw, 2rem);
+
+    /* WEIGHT */
+    --price-weight: 400;
+
+    /* COLOR */
+    --LOGO-Bcolor: rgba(0, 117, 255, 0.55);
+    --LOGO-Ucolor: #F0F28A;
+    --STATIC-COLOR: #000;
+    --BGCOLOR: whitesmoke;
+    --BANER-COLOR: #F5F5F5;
+    --BANNER-txtColor: #1A234D;
+    --BANNER-WelcomeTxt: #3D3D3D;
+    --LinksColor: #6a6a6a;
+    --BTN-Hover:  #d3d3d3;
+    --BUTTON-COLOR: #474E81;
+    --BANNER-BG: hsl(0, 0%, 99%);
+    --BTN-color: #474E81;
+    --filter-btn: #46A358;
+    --filter-txt: #4B5187;
+    --footerBG: hwb(132 27% 36% / 0.1);
+    --footerBGBorder: hwb(132 27% 36% / 0.2);
+    --discount-color: #973F3F;
+
+
+    /* SHADOW COLOR */
+    --BANNER-SHCOLOR: #CCD1F5;
+    --box-SHADOW: 5px 0 5px var(--BANER-COLOR);
+
+    /* transitions / transforms */
+    --BTN-transition: 0.3s;
+    --BTN-scale: scale(0.95);
+    --animtion-auration: 0.7s;
+
+    /* padding */
+    --BTN-pad: 0.25rem 1rem;
+
+    /* margin */
+    --price-mg: 0.25rem;
+
+    /* radius */
+    --BTN-radius: 5px;
+
+    /* animation time */
+    --delay-page-load: 0.3s;
+}

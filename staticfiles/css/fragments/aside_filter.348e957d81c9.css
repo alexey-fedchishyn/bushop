@@ -1,0 +1,155 @@
+
+/* filter panel */
+aside.filter-panel-container {
+    display: inline-block;
+    background-color: var(--BANNER-BG);
+    color: var(--BANNER-WelcomeTxt);
+    padding: 2rem 2.5rem 2rem 1rem;
+
+
+    position: relative;
+   
+    
+}
+
+aside.filter-panel-container.active {
+    max-height: 100%;
+
+    overflow-y: scroll;
+}
+
+#crosser {
+    position: absolute;
+    
+    right: 0.2rem;
+    top: 1.5rem;
+
+    font-size: 1.2rem;
+    display: none;
+    background: transparent;
+}
+
+.panel-container .filter {
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+.panel-container label {
+    font-size: var(--FS);
+    font-weight: 800;
+}
+
+.add-after-el::after{
+    content: '❱';
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-cross {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+}
+
+.panel-container label,
+.panel-container span {
+    margin: 0.78rem 0;
+}
+
+.panel-container span label {
+    cursor: pointer;
+    font-weight: 100;
+}
+
+.panel-container span label::before {
+    content: '';
+    display: inline-block;
+    width: var(--FS);
+    height: var(--FS);
+}
+
+.panel-container span {
+    white-space: nowrap;
+}
+
+.panel-container input[type='radio'] {
+    display: none;
+}
+
+.panel-container input[type='text'] {
+    max-width: clamp(50px, 4.5vw, 200px);
+    height: clamp(30px, 1.5vw, 70px);
+    border: 1px solid var(--BANNER-WelcomeTxt);
+    border-radius: var(--BTN-radius);
+    text-align: center;
+    font-size: var(--FS);
+}
+
+.panel-container input[type='radio']:checked + label {
+    color: var(--filter-txt);
+    font-weight: bold;
+    transition: var(--BTN-transition);
+    margin-left: 0.2rem;
+}
+
+.panel-container button {
+    transition: var(--BTN-transition);
+    font-size: var(--FS);
+    background-color: var(--filter-btn);
+    color: var(--BANER-COLOR);
+    border-radius: var(--BTN-radius);
+    margin: 0.5rem 0;
+    padding: 0.4rem 1.3rem;
+    cursor: pointer;
+
+}
+
+.panel-container button:hover {
+    transform: var(--BTN-scale);
+}
+
+.price-filter {
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+
+.sz_filter {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.btn-cross-sz {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+}
+
+.btn-cross-sz::after {
+    content: '❱';
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-brands {
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.btn-brands::after {
+    content: '❱';
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.br_filter {
+    display: flex;
+    flex-flow: column nowrap;
+}

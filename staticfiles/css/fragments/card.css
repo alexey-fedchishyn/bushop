@@ -1,0 +1,271 @@
+
+.content-container {
+    display: flex;
+    width: 100%;
+}
+
+.content-container nav {
+    padding-top: 0.5rem;
+}
+
+.content-container nav a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.content-container nav button {
+    background-color: var(--filter-btn);
+    color: var(--BANER-COLOR);
+    font-size: var(--FS);
+    border-radius: var(--BTN-radius);
+    margin-left: 0.6rem;
+    padding: var(--BTN-pad);
+    font-weight: 500;
+    text-align: center;
+    display: none;
+    transition: var(--BTN-transition);
+}
+
+.content-container nav button:hover,
+.content-container nav button:focus {
+    transform: var(--BTN-scale);
+}
+
+
+.product-cards-container {
+    display: grid;
+
+    width: 100%;
+    place-content: center;
+    justify-content: space-around;
+    grid-template-columns:  25% 25% 25% 25%;
+}
+
+.cards-con-cont {
+
+    display: block;
+    padding: 0.4rem;
+    margin-bottom: 1rem;
+
+    filter: blur(2px);
+    opacity: 0;
+}
+
+@keyframes showed {
+    from {
+        opacity: 0;
+        filter: blur(2px);
+    } to {
+        opacity: 1;
+        filter: blur(0px);
+
+    }
+}
+
+.card-container {
+    box-shadow: var(--box-SHADOW);
+    height: 100%;
+    position: relative;
+    padding: .5rem .3rem;
+
+}
+
+
+.card-container:hover .card-btn_buy_one_click {
+    display: block;
+}
+
+.card {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    height: 100%;
+    transition: var(--BTN-transition);
+    opacity: 1;
+    position: relative;
+}
+
+.discount {
+    position: absolute;
+    top: -1rem;
+    left: 0;
+    z-index: 5;
+
+    color: var(--BANER-COLOR);
+    background-color: var(--discount-color);
+    border-radius: 0.3125rem;
+
+    padding: 0.3rem 0.6rem;
+}
+
+.discount-container {
+    margin-top: var(--price-mg);
+}
+
+.discountPrice {
+    font-weight: var(--price-weight);
+    color: var(--discount-color);
+}
+
+.card-price-without-discount {
+    margin-left: 0.3rem;
+    text-decoration: line-through;
+    opacity: 0.6;
+}
+
+.card:hover .newProductsPage {
+    display: none;
+}
+
+.abs {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+}
+
+.card-image-container {
+    width: 100%;
+    height: 100%;
+
+}
+
+.card-image {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.card-image img {
+    transition: var(--BTN-transition);
+    height: 100%;
+    width: 100%;
+    cursor: pointer;
+    object-fit: contain;
+}
+
+.card-image:hover img {
+    transform: scale(1.02);
+}
+
+.card-image .opacity {
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+    bottom: 0;
+    top: 0;
+    left: 0;
+}
+
+.card-image:hover .opacity {
+    opacity: 1;
+}
+
+.card-image:hover .activated_opacity {
+    opacity: 0;
+}
+
+.section-card {
+    margin-top: 0.5rem;
+
+    display: flex;
+    justify-content: space-between;
+}
+
+abbr[title] {
+    text-decoration: none;
+    border-bottom: none;
+}
+
+.card-name-and-buybtn {
+    margin-top: 0.3rem;
+    position: relative;
+}
+
+.card-name {
+    font-size: var(--FS);
+    color: var(--filter-txt);
+    cursor: pointer;
+}
+
+.card-name:hover {
+    text-decoration: underline;
+}
+
+#buybtn {
+    background: transparent;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+#buybtn img {
+    width: clamp(1rem, 2vw, 2rem);
+    transition: var(--BTN-transition);
+}
+
+#buybtn img:hover {
+    transform: var(--BTN-scale);
+}
+
+.card-price {
+    margin-top: var(--price-mg);
+    color: var(--filter-btn);
+    font-weight: var(--price-weight);
+}
+
+#nm-pr-con {
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+.card-btn_buy_one_click {
+   display: flex;
+   align-items:end;
+   margin:0.45rem;
+}
+
+.card-btn_buy_one_click button img {
+    width: clamp(1.8rem, 1.5vw, 3rem);
+}
+
+.card-btn_buy_one_click button {
+    display: flex;
+    align-items: flex-start;
+
+    align-items: flex-start;
+    background: transparent;
+    width: 100%;
+    height: 100%;
+    transition: var(--BTN-transition);
+
+
+}
+
+.card-btn_buy_one_click button:hover {
+   animation-name: backet;
+   animation-duration: 0.3s;
+   animation-timing-function: ease-in-out;
+}
+
+@keyframes backet {
+    0% {
+        transform: rotate(0);
+    }
+
+    30% {
+        transform: rotate(5deg);
+    }
+
+    60% {
+        transform: rotate(-10deg);
+    }
+
+    100% {
+        transform: rotate(0);
+    }
+}

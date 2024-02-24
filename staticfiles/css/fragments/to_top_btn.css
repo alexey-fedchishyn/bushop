@@ -1,0 +1,25 @@
+.to_top {
+    position: fixed;
+    cursor: pointer;
+    display: none;
+
+    right: 2rem;
+    
+    font-size: clamp(2.8rem, 2.6vw, 3rem);
+    transform: rotateZ(-90deg);
+
+    animation-name: scrollTotop;
+    animation-duration: 0.4s;
+    animation-timing-function: ease-in;
+    animation-fill-mode: forwards;
+}
+
+@keyframes scrollTotop {
+    0% {
+        bottom: -3rem;
+    }
+
+    100% {
+        bottom: 2rem
+    }
+}

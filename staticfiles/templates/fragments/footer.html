@@ -1,0 +1,90 @@
+{% load static %}
+<footer>
+
+
+    {% if foot_category %}
+        <div class="container-for-more-ptoduct">
+            <h2>В нас також можно придбати</h2>
+        </div>
+    {% endif %}
+
+    <div class="categoty-cards-container">
+
+        {% if foot_cards %}
+            {% for elem in foot_cards %}
+                {% include './card.html' %}
+            {% endfor %}
+        {% else %}
+            {% for category, photo in foot_category.items %}
+
+                <div class="category-cards">
+                    <div class="category-cards-img">
+                        <a href="{% url 'home' %}?Категорія={{ category }}"><img src="data:image/jpeg;base64,{{ photo }}"></a>
+                    </div>
+                    <div class="category-cards-name_btn-container">
+                        <div class="category-cards-name">
+                                <a href="{% url 'home' %}?Категорія={{category}}">{{ category }}</a>
+                        </div>
+                        <div class="category-cards-btn">
+                                <a href="{% url 'home' %}?Категорія={{category}}">Перейти <span class="f-line"></span><span class="s-line"></span></a>
+                        </div>
+                    </div>
+                </div>
+
+            {% endfor %}
+            
+
+        {% endif %}
+
+    </div>
+
+    <div id="Contacts">
+        <address>
+            <span><img style="width: 1.3vw; height: auto;" src="{% static 'images/icons/email_icon.png' %}"><a href="mailto:info@borcovkiukraine.com.ua">info@borcovkiukraine.com.ua</a></span>
+            <span><img style="width: 1.3vw; height: auto;" src="{% static 'images/icons/Calling.png' %}"><a href="tel:+380631144525">+38 (063) 114 45 25</a></span>
+        </address>
+    </div>
+
+    <div id="paidAndDelivery" class="dop-info">
+        <div class="help">
+            <p>Допомога</p>
+            <ul>
+                <li><a href="{% url 'home' %}/info">Купівля & Доставка</a></li>
+                <li><a href="{% url 'home' %}/info">Як повернути</a></li>
+            </ul>
+        </div>
+        <div class="categories">
+            <p>Категорії</p>
+            <ul>
+                {% for category in foot_category %}
+                    <li><a href="{% url 'home' %}?Категорія={{category}}">{{category}}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="social-media_and-paids">
+            <div class="social">
+                <p style="text-align: center;">Соціальні мережі</p>
+                <div class="img-social">
+                    <span>
+                        <img src="{% static '/images/' %}icons/Facebook.png">
+                    </span>
+                    <span>
+                        <a target="_blank" href="https://www.instagram.com/borcovkiukraine/?hl=ru"><img src="{% static '/images/' %}icons/INST.png"></a>
+                    </span>
+                </div>
+            </div>
+            <div style="text-align: center;" class="paids-conatiner">
+                <p style="text-align: center;" id="paids-list">Ми приймаємо</p>
+                <span>
+                    <img src="{% static '/images/' %}icons/paids.png">
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="copyright">
+        <p>© Copyright (c) <span></span> BorcivkyUkraine.com.ua</p>
+    </div>
+
+
+</footer>

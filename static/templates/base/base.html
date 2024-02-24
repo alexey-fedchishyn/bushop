@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="authors" content="Developer: Valerii Diachenko UI/UX: Nazarii Samchuk">
+    {% block metatags %}{% endblock %}
+    <title>{% block titlepage %}{% endblock %}</title>
+    {% load static %}
+    <link rel="icon" type="png" href="{% static 'images/logo/brocivky_logo.png' %}">
+    {% block styles %}{% endblock %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@700&family=Oswald:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/reset/reset.css' %}">
+    <link rel="stylesheet" href="{% static 'css/variables/variables.css' %}">
+    <link rel="stylesheet" href="{% static 'css/fragments/trash.css' %}">
+    <link rel="stylesheet" href="{% static 'css/fragments/succes_window.css' %}">
+</head>
+<body>
+    {% csrf_token %}
+    {% block body %}{% endblock %}
+    
+</body>
+</html>
