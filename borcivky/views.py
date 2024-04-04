@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.core.mail import send_mail 
-from django.conf import settings
+from bu import settings
 from django.db.models import Max, Min
 
 
@@ -226,10 +226,50 @@ async def info(r):
     return await sync_to_async(render)(r, 'pages/info.html', con)
 
 
-async def mail(message_body: str, client_email: str, 
-               subject: str = 'Дякуємо за замовлення в нашому магазиині!'):
+async def mail(
+        client_email: str, 
+        data: list[dict],
+        subject: str = 'Дякуємо за замовлення в нашому магазиині!'
+):
+    ordw = []
+    for i in data:
+
+        product = await sync_to_async(Product.objects.get)(id=i.get("idProduct"))
+        await sync_to_async(print)(product)
+        await sync_to_async(ordw.append)([product, i.get("value"), i.get("ordersize")])
+
+    products = "".join([
+                    f"\tТовар номер - {ordw.index(i) + 1}\n" \
+                    f"\t\tКатегорія - {i[0].Категорія}\n" \
+                    f"\t\tБренд - {i[0].Бренд}\n" \
+                    f"\t\tМодель - {i[0].Модель}\n" \
+                    f"\t\tКолір - {i[0].Колір}\n" \
+                    f"\t\tКількість - {i[1]}\n" \
+                    f"\t\tРозмір - {i[2]}\n\n" for i in ordw
+                ])
+    
     await sync_to_async(send_mail)(
-        subject, message_body, settings.DEFAULT_FROM_EMAIL, 
+        subject="У вас нове замовлення!",
+        message=f"Ім'я клієнта: {data[0].get('userName')} {data[0].get('secondName')}\n" \
+                f"Номер телефону: {data[0].get('userPhone')}\n" \
+                f"Пошта клієнта: {data[0].get('userEmail')}\n" \
+                f"Місто та відділення: м. {data[0].get('City')}, {data[0].get('vidil')}\n" \
+                f"Тип оплати: {data[0].get('opls')}\n" \
+                "Товари:\n" \
+                f"{products}",
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        recipient_list=settings.ORDERS_RECEPTIENS,
+        fail_silently=False
+    )
+
+    await sync_to_async(send_mail)(
+        subject=subject, 
+        message="Ваше замовлення зарєстровано, "  \
+                f"та буде доставлено у місто {data[0].get('City')}, " \
+                f"відділення {data[0].get('vidil')}.\n" \
+                "Інформація про товар:\n" \
+                f"{products}",
+        from_email=settings.DEFAULT_FROM_EMAIL, 
         recipient_list=[client_email],
         fail_silently=False
     )
@@ -238,12 +278,9 @@ async def mail(message_body: str, client_email: str,
 async def order(r):
     try:
         req = await sync_to_async(json.loads)(r.POST['data'])
-        email = None
-        warhouse = None
-        city = None
+        order_ = {}
 
         for i in range(len(req)):
-            order_ = {}
 
             order_['product_id'] = int(req[i]['idProduct'])
             order_['name'] = req[i]['userName']
@@ -256,13 +293,9 @@ async def order(r):
             order_['count'] = req[i]['value']
             order_['size'] = req[i]['ordersize']
 
-            warhouse = order_['warhouse']
-            email = order_['email']
-            city = order_['city']
             await sync_to_async(Order.objects.create)(**order_)
 
-        await mail(f"""Повідомляємо що ваше замовлення зареєстроване
-                    та буде доставлено до міста {city} у {warhouse}""", email)
+        await mail(order_['email'], data=req)
 
         return JsonResponse({'status': 200})
     

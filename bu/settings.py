@@ -15,6 +15,7 @@ from pathlib import Path
 from random import choice
 
 from dotenv import load_dotenv 
+import json
 import os
 
 
@@ -32,9 +33,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "".join([chr(choice(range(33, 73))) for _ in range(70)])
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+CSRF_TRUSTED_ORIGINS = [
+    "https://borcivkyukraine.com", 
+    "https://www.borcivkyukraine.com", 
+    "http://127.0.0.1", 
+    "http://172.31.36.78"
+]
+
+ALLOWED_HOSTS = [
+    "borcivkyukraine.com", 
+    "www.borcivkyukraine.com", 
+    "127.0.0.1", 
+    "172.31.36.78"
+]
 
 
 # Application definition
@@ -91,11 +104,11 @@ WSGI_APPLICATION = 'bu.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'borcivky_shop',
-        "USER": "bushop",
-        "PASSWORD": "bushop789789",
-        "HOST": "borcivky-shop.cxemmuoq0a5y.eu-north-1.rds.amazonaws.com",
-        "PORT": "5432",
+        'NAME': os.environ.get("POSTGRES_DB"),
+        "USER": os.environ.get("POSTGRES_USER"),
+        "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
+        "HOST": os.environ.get("DB_HOST"),
+        "PORT": os.environ.get("DB_PORT"),
     }
 }
 
@@ -164,3 +177,5 @@ EMAIL_HOST_USER = enviroment.get('EMAIL_ADMIN')
 EMAIL_HOST_PASSWORD = enviroment.get('EMAIL_ADMIN_PASSWORD')
 
 DEFAULT_FROM_EMAIL = enviroment.get('EMAIL_ADMIN')
+
+ORDERS_RECEPTIENS = json.loads(enviroment.get("ORDERS_RECEPTIENS", "[]"))

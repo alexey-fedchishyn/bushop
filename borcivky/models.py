@@ -1,7 +1,7 @@
 from django.db import models
-from django.db.models.signals import post_delete, pre_delete
+from django.db.models.signals import pre_save
 from django.dispatch import receiver
-from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.utils.html import format_html
 
 from PIL import Image
 from io import BytesIO
@@ -69,6 +69,19 @@ class Product(models.Model):
     Знижка = models.IntegerField(default=0)
     data = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f"ID: {self.id} Info: {self.Категорія} {self.Бренд} {self.Модель}"
+
+    @property
+    def image(self):
+        elems = [self.first, self.second, self.third, self.fourth]
+
+        string = ''
+        for i in [j for j in elems if j]:
+            string += f"<img src='data:image/jpeg;base64,{i}' width='200' />\n"
+
+        return format_html(string)
+
     def resize_image(self, image, width: int, height: int):
         img = Image.open(BytesIO(image))
 
@@ -97,24 +110,14 @@ class Product(models.Model):
 
 
     def save(self, *args, **kwargs):
-        self.first = self.edit_img(self.tit) if self.tit else None
-        self.second = self.edit_img(self.stit) if self.stit else None
-        self.third = self.edit_img(self.static1) if self.static1 else None
-        self.fourth = self.edit_img(self.static2) if self.static2 else None
+        self.first = self.edit_img(self.tit) if self.tit else None 
+        self.second = self.edit_img(self.stit) if self.stit else None 
+        self.third = self.edit_img(self.static1) if self.static1 else None 
+        self.fourth = self.edit_img(self.static2) if self.static2 else None 
+
+        self.Ціна2 = self.Ціна
 
         super().save()
-
-
-    def __str__(self):
-        return f'{self.id} | {self.Категорія} | {self.Бренд} | {self.Модель} | {self.Колір}'
-    
-
-@receiver([post_delete, pre_delete], sender=Product)
-def delete_image(sender, instance, **kwargs):
-    print('ok')
-    print(instance)
-
-
 
 class Order(models.Model):
     id = models.AutoField(primary_key=True)
@@ -132,8 +135,6 @@ class Order(models.Model):
                                 default=1)
     done = models.BooleanField(default=0, blank=False, null=False)
 
-    def __str__(self):
-        return f"Товар id: {self.product.id} Покупець: {self.name} {self.email} {self.phone}"
     
 
 class Pay(models.Model):
@@ -154,26 +155,16 @@ class BannerImage(models.Model):
 
     link = models.TextField(null=True, blank=True)
 
+    def edit_img(self, image):
+        with BytesIO() as output:
+            [output.write(i) for i in image.chunks()]
+            
+            image.delete(False)
+        
+            return base64.b64encode(output.getvalue()).decode()
 
     def save(self, *args, **kwargs):
+        self.banner = self.edit_img(self.photo)
+        self.photo = None
+
         super().save()
-
-        self.banner = convert_photo(self.photo.path, self.banner)
-
-        super().save()
-
-        try:
-            os.remove(self.photo.path)
-        except FileNotFoundError:
-            pass
-
-
-    def __str__(self):
-        return self.photo.name
-
-@receiver(post_delete, sender=BannerImage)
-def delete_image(sender, instance, **kwargs):
-    if instance.photo:
-        if os.path.isfile(instance.photo.path):
-            os.remove(instance.photo.path)
-    
