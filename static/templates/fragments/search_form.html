@@ -1,0 +1,121 @@
+{% load static %}
+  <style>
+    .header-nav {
+    padding: 0.5rem 0;
+    position: relative;
+  }
+  .search-form form {
+    position: relative;
+  }
+  .search-form > form > .search-icon {
+    position: absolute;
+    left: 8px;
+    bottom: 50%;
+    transform: translateY(50%);
+    width: 20px;
+    height: 20px;
+    object-fit: cover;
+  }
+
+  .search-form input {
+    border: none;
+    outline: none;
+    background: #f3f3f3;
+    border-radius: 20px;
+    padding: 8px 16px 8px 36px;
+  }
+
+  .searchBtn {
+    display: none;
+  }
+
+  .cross-icon {
+    display: none;
+  }
+
+  @media only screen and (max-width: 800px) {
+    /* MOBILE */
+
+    .search-form {
+      bottom: 0;
+      max-width: 100%;
+      background: white;
+      top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .search-form {
+    }
+    .search-form form {
+      width: 100%;
+      display: none;
+    }
+
+    .search-form input {
+      width: 100%;
+      max-width: 100%;
+      border-radius: 0;
+      box-sizing: border-box;
+      padding: 8px 36px;
+      width: 100%;
+    }
+
+    .search-form.open {
+      position: absolute;
+      width: 100%;
+      padding-top: 20px;
+      z-index: 9;
+    }
+
+    .search-form.open form {
+      display: flex;
+    }
+
+    .search-form.open .searchBtn {
+      display: none;
+    }
+
+    .searchBtn {
+      display: block;
+      width: 20px;
+      height: 20px;
+      background: #6a6a6a3e;
+      padding: 5px;
+      border-radius: 50%;
+    }
+
+    .cross-icon {
+      display: block;
+      width: 20px;
+      height: 30px;
+	  object-fit: contain;
+	  margin-left: 8px;
+    }
+  </style>
+
+<div class="search-form">
+  <img
+    onclick="searchToggle()"
+    src="{% static 'images/icons/search.png' %}"
+    class="searchBtn"
+    alt=""
+  />
+  <form action="{% url 'home' %}" method="get">
+    <img class="search-icon" src="{% static 'images/icons/search.png' %}" alt="" />
+    <input name="q" type="text" placeholder="Пошук..." />
+    <img
+      onclick="searchToggle()"
+      class="cross-icon"
+      src="{% static 'images/icons/cross.png' %}"
+      alt=""
+    />
+  </form>
+</div>
+<script>
+function searchToggle() {
+  document.querySelector(".search-form").classList.toggle("open");
+  document.querySelector(".search-form input").value = "";
+}
+</script>
