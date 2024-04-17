@@ -2,8 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.core.mail import send_mail 
 from bu import settings
-from django.db.models import Max, Min
-
+from django.db.models import Max, Min, Q
 
 from .models import (Pay,
                      BannerImage, 
@@ -16,7 +15,6 @@ from asgiref.sync import sync_to_async
 
 from random import choice
 import json
-
 
 
 def sizes(sizes: list) -> list:
@@ -65,11 +63,14 @@ async def get_brands() -> dict:
             'reverse_brand': {i['Бренд']: i['id'] for i in to_list}}
 
 
-async def get_products(fields: dict, **kwargs) -> dict:
+async def get_products(fields: dict = None, search_q: Q = None, **kwargs) -> dict:
+
     obj = Product.objects
 
     request = None
-    if fields:
+    if search_q:
+        request = await sync_to_async(obj.filter)(search_q)
+    elif fields:
         request = await sync_to_async(obj.filter)(**fields)
     else:
         request = await sync_to_async(obj.all)()
@@ -82,20 +83,21 @@ async def get_products(fields: dict, **kwargs) -> dict:
                 request = request.order_by('-Ціна2')
             case _:
                 pass
-    
+
     all_categories = await sync_to_async(list)(await sync_to_async(obj.values)('Категорія_id', 'id'))
-    
+
+    if not fields:
+        fields = dict()
+
     if 'Категорія_id' in fields:
         size = await sync_to_async(obj.filter)(Категорія_id=fields['Категорія_id'])
         size = await sync_to_async(list)(await sync_to_async(size.values)('Розмір'))
-        
+
         brand = await sync_to_async(obj.filter)(Категорія_id=fields['Категорія_id'])
         brand = await sync_to_async(list)(await sync_to_async(brand.values)('Бренд_id'))
     else:
         size = await sync_to_async(list)(await sync_to_async(obj.values)('Розмір'))
         brand = await sync_to_async(list)(await sync_to_async(obj.values)('Бренд_id'))
-
-
     return {'cards': await sync_to_async(list)(request.values()), 
             'all_categories': all_categories, 
             'count': await sync_to_async(request.count)(),
@@ -131,15 +133,15 @@ async def context(start: int = None, end: int = None, **kwargs):
         'oplata': await get_pays_methods(),
         'banner': await get_banners(),
         'category': set([category['category'][i['Категорія_id']] for i in products['all_categories']]),
-        'category_' : dict([(category['category'][i['Категорія_id']], i['id']) for i in products['all_categories']]),
+        'category_': dict([(category['category'][i['Категорія_id']], i['id']) for i in products['all_categories']]),
         'sizes': products['sizes'],
         'brands': set([brand['brand'][i['Бренд_id']] for i in products['brand']]),
         'min_price': min_price, 
         'max_price': max_price,
         'count': products['count'],
-        'card' : [convert_column_foreign_ids(i, 
-                                             category=category['category'],
-                                             brand=brand['brand']) for i in products['cards'][start:end]]
+        'card': [convert_column_foreign_ids(i,
+                                            category=category['category'],
+                                            brand=brand['brand']) for i in products['cards'][start:end]]
     } 
 
     return await sync_to_async(set_context_categories)(data)
@@ -170,34 +172,65 @@ async def price(temp: dict) -> list[int] | list[None]:
     return [int(temp['price-min'][0]), int(temp['price-max'][0])] if 'price-min' in temp and 'price-max' in temp else [None, None]
 
 
+async def get_search_results(start: int, end: int, q: str):
+
+    try:
+        search_q = Q(Модель__contains=q) | Q(Опис__contains=q)
+        products = await get_products(search_q=search_q)
+    except Exception as e:
+        print(e)
+    print(type(products))
+    category = await get_categories()
+    brand = await get_brands()
+    min_price, max_price = await get_max_min_price()
+
+    data = {
+        'oplata': await get_pays_methods(),
+        'banner': await get_banners(),
+        'category': set([category['category'][i['Категорія_id']] for i in products['all_categories']]),
+        'category_': dict([(category['category'][i['Категорія_id']], i['id']) for i in products['all_categories']]),
+        'sizes': products['sizes'],
+        'brands': set([brand['brand'][i['Бренд_id']] for i in products['brand']]),
+        'min_price': min_price,
+        'max_price': max_price,
+        'count': products['count'],
+        'card': [convert_column_foreign_ids(i,
+                                            category=category['category'],
+                                            brand=brand['brand']) for i in products['cards'][start:end]]
+    }
+    print('Returning values')
+    return await sync_to_async(set_context_categories)(data)
+
+
 async def search(r):
+    print('Search view')
     get = await sync_to_async(dict)(r.GET)
     page = await get_page(get)
-
     items_count = 12
     start = (page - 1) * items_count
     end = start + items_count
 
+    q = r.GET.get("q")
+    print(f'Search view: {q}')
+    if q:
+        cont = await get_search_results(start, end, q.lower())
+    else:
+        db_r = {i: get[i][0] for i in get if get.keys()}
+        price_min, price_max = await price(get)
 
-    db_r = {i: get[i][0] for i in get if get.keys()}
+        if price_min and price_max:
+            db_r = db_r | {'Ціна2__gte': price_min, 'Ціна2__lte': price_max}
 
-    price_min, price_max = await price(get)
-    if price_min and price_max:
-        db_r = db_r | {'Ціна2__gte': price_min, 'Ціна2__lte': price_max}
-
-    cont = await context(start, end, **db_r)
-
+        cont = await context(start, end, **db_r)
 
     if 'sort' in get.keys():
         cont['sort'] = db_r['sort']
 
-    
     total_pages = (cont['count'] + items_count - 1) // items_count
     cont['page'] = page
     cont['total_pages'] = total_pages
-
+    # print(p)
     return await sync_to_async(render)(r, 'pages/home.html', cont)
-
 
 
 def get_orders(r):
